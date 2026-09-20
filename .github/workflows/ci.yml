@@ -1,0 +1,33 @@
+name: CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright Browser
+        run: playwright install --with-deps chromium
+
+      - name: Run Pytest and Generate Report
+        # We tell pytest to save the HTML report specifically in artifacts/reports/
+        run: pytest -v --html=artifacts/reports/pytest_report.html --self-contained-html
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: organized-test-evidence
+          # We ONLY upload the artifacts directory, keeping it perfectly organized!
+          path: artifacts/
