@@ -18,7 +18,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Install Playwright Browser
-        run: playwright install --with-deps chromium
+        run:  python -m playwright install --with-deps chromium
 
       - name: Run Pytest and Generate Report
         # We tell pytest to save the HTML report specifically in artifacts/reports/
